@@ -1,0 +1,35 @@
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS tasks (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  description TEXT,
+  estimate_minutes INTEGER DEFAULT 25,
+  completed_count INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS goals (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  description TEXT,
+  target INTEGER DEFAULT 1,
+  progress INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  task_id INTEGER,
+  duration_minutes INTEGER,
+  type TEXT CHECK(type IN ('pomodoro','short_break','long_break')),
+  completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(task_id) REFERENCES tasks(id)
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT
+);
+
+COMMIT;
